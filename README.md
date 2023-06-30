@@ -1,0 +1,4 @@
+# tateti
+
+JUEGO TA-TE-TI
+TIC-TAC-TOE GAME
