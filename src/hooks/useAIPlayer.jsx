@@ -1,72 +1,76 @@
 import {useEffect} from "react";
+
 import {TURNS, WINNER_COMBOS} from "../constants";
 
-const useAIPlayer = (board, turn, numberOfPlayers, updateBoard) => {
+const useAIPlayer = (numberOfPlayers, board, updateBoard, turn) => {
   useEffect(() => {
     if (turn === TURNS.X || numberOfPlayers === 2) return;
 
     const newBoard = [...board];
 
-    const getPreviousMoves = () => {
-      let moves = newBoard.reduce((acc, sq, i) => {
-        if (sq === TURNS.O) {
-          acc.push(i);
+    const getEmptySpaces = () => {
+      return newBoard.reduce((emptySpaces, value, index) => {
+        if (value === null) {
+          emptySpaces.push(index);
         }
-        return acc;
+        return emptySpaces;
       }, []);
-      return moves;
     };
 
-    const getWinningMove = (boardToCheck) => {
-      let previousMoves = getPreviousMoves();
-      const relevantWinningCombinations = WINNER_COMBOS.filter((combo) =>
-        combo.some((cell) => previousMoves.includes(cell)),
-      );
+    const getPreviousMoves = (player) => {
+      return newBoard.reduce((emptySpaces, value, index) => {
+        if (value === player) {
+          emptySpaces.push(index);
+        }
+        return emptySpaces;
+      }, []);
+    };
 
-      for (let combo of relevantWinningCombinations) {
+    const getWinningMove = (player) => {
+      let emptySpaces = getEmptySpaces();
+      let previousMoves = getPreviousMoves(player);
+
+      let winningMove = null;
+
+      for (let combo of WINNER_COMBOS) {
         const [a, b, c] = combo;
-        if (
-          boardToCheck[a] === TURNS.O &&
-          boardToCheck[b] === TURNS.O &&
-          boardToCheck[c] === null
+
+        if (previousMoves.includes(a) && previousMoves.includes(b) && emptySpaces.includes(c)) {
+          winningMove = c;
+          return winningMove;
+        } else if (
+          previousMoves.includes(b) &&
+          previousMoves.includes(c) &&
+          emptySpaces.includes(a)
         ) {
-          return c;
-        }
-        if (
-          boardToCheck[a] === TURNS.O &&
-          boardToCheck[b] === null &&
-          boardToCheck[c] === TURNS.O
+          winningMove = a;
+          return winningMove;
+        } else if (
+          previousMoves.includes(a) &&
+          previousMoves.includes(c) &&
+          emptySpaces.includes(b)
         ) {
-          return b;
-        }
-        if (
-          boardToCheck[a] === null &&
-          boardToCheck[b] === TURNS.O &&
-          boardToCheck[c] === TURNS.O
-        ) {
-          return a;
+          winningMove = b;
+          return winningMove;
         }
       }
-      return null;
+
+      return winningMove;
     };
 
     setTimeout(() => {
-      let winningMove = getWinningMove(newBoard);
-      if (winningMove === null) {
-        let emptySpaces = [];
-        for (let i = 0; i < 9; i++) {
-          if (newBoard[i] === null) {
-            emptySpaces.push(i);
-          }
-        }
+      let winningMovePlayer = getWinningMove(TURNS.X);
+      let winningMoveAI = getWinningMove(TURNS.O);
 
-        let randomIndex = emptySpaces[Math.floor(Math.random() * emptySpaces.length)];
-        updateBoard(randomIndex);
+      if (winningMoveAI !== null) {
+        updateBoard(winningMoveAI);
+      } else if (winningMovePlayer !== null) {
+        updateBoard(winningMovePlayer);
       } else {
-        updateBoard(winningMove);
+        updateBoard(getEmptySpaces()[Math.floor(Math.random() * getEmptySpaces().length)]);
       }
-    }, 500);
-  }, [updateBoard, turn, numberOfPlayers, board]);
+    }, 800);
+  }, [turn, numberOfPlayers, board, updateBoard]);
 };
 
 export default useAIPlayer;

@@ -5,7 +5,7 @@ const Board = ({board, turn, updateBoard}) => {
     <section className="board">
       {board.map((square, i) => (
         <Square key={i} index={i} updateBoard={updateBoard} turn={turn}>
-          {square}
+          <span className={square ? "square-icon square-icon-show" : "square-icon"}>{square}</span>
         </Square>
       ))}
     </section>

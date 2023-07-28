@@ -13,9 +13,10 @@ import useAIPlayer from "./hooks/useAIPlayer";
 
 const App = () => {
   const [numberOfPlayers, setNumberOfPlayers] = useState(0);
-  const {board, turn, winner, updateBoard, setTurn, setWinner, setBoard} = usePlayerMove();
+  const {board, turn, winner, updateBoard, setTurn, setWinner, setBoard} =
+    usePlayerMove(numberOfPlayers);
   const {resetGame, returnMenu} = useEndGame(setBoard, setTurn, setNumberOfPlayers, setWinner);
-  useAIPlayer(board, turn, numberOfPlayers, updateBoard);
+  useAIPlayer(numberOfPlayers, board, updateBoard, turn);
 
   ///MANEJO DEL MENÚ PRINCIPAL
   const handleMenu = (e) => {
