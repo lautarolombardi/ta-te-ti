@@ -2,9 +2,9 @@ import {useEffect} from "react";
 
 import {TURNS, WINNER_COMBOS} from "../constants";
 
-const useAIPlayer = (numberOfPlayers, board, updateBoard, turn) => {
+const useAIPlayer = (winner, numberOfPlayers, board, updateBoard, turn) => {
   useEffect(() => {
-    if (turn === TURNS.X || numberOfPlayers === 2) return;
+    if (winner !== null || turn === TURNS.X || numberOfPlayers === 2) return;
 
     const newBoard = [...board];
 
@@ -70,7 +70,7 @@ const useAIPlayer = (numberOfPlayers, board, updateBoard, turn) => {
         updateBoard(getEmptySpaces()[Math.floor(Math.random() * getEmptySpaces().length)]);
       }
     }, 800);
-  }, [turn, numberOfPlayers, board, updateBoard]);
+  }, [turn, numberOfPlayers, board, updateBoard, winner]);
 };
 
 export default useAIPlayer;

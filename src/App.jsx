@@ -16,7 +16,7 @@ const App = () => {
   const {board, turn, winner, updateBoard, setTurn, setWinner, setBoard} =
     usePlayerMove(numberOfPlayers);
   const {resetGame, returnMenu} = useEndGame(setBoard, setTurn, setNumberOfPlayers, setWinner);
-  useAIPlayer(numberOfPlayers, board, updateBoard, turn);
+  useAIPlayer(winner, numberOfPlayers, board, updateBoard, turn);
 
   ///MANEJO DEL MENÚ PRINCIPAL
   const handleMenu = (e) => {
