@@ -1,4 +1,4 @@
-const Menu = ({handleMenu}) => {
+const Menu = ({ handleMenu }) => {
   return (
     <div>
       <button id="1" onClick={(e) => handleMenu(e)}>
@@ -8,7 +8,7 @@ const Menu = ({handleMenu}) => {
         2 jugadores
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default Menu;
+export default Menu
